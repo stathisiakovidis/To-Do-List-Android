@@ -10,24 +10,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String INFO = "Info";
+    public static final String INFO = "MyInfo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialize toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        toolbar.setTitle("Most Recently");
+
+        Log.i(INFO, (String) toolbar.getTitle());
+
+        FloatingActionButton floatingButton = findViewById(R.id.floatingButton);
+        floatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -45,17 +51,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
 
-//        ArrayList<String> titles = new ArrayList<>();
-//        titles.add("Most Recently");
-//        titles.add("With date");
-//
-//        Spinner spinner = findViewById(R.id.spinner);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, titles);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        spinner.setAdapter(adapter);
-
         return true;
     }
 
@@ -67,18 +62,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch(id){
-            case R.id.action_settings:
-                Log.i(INFO, "Settings option is clicked");
-
-                break;
             case R.id.action_calendar:
                 //change activity
                 Log.i(INFO, "Calendar option is clicked");
                 Intent myIntent = new Intent(this, CalendarActivity.class);
                 startActivity(myIntent);
                 break;
-            case R.id.action_indefinite:
-                Log.i(INFO, "Indefinite option is clicked");
+            case R.id.share_trello:
+                Log.i(INFO, "Share Trello option is clicked");
                 break;
             default:
 
