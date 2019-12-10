@@ -13,6 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Most Recently");
 
         Log.i(INFO, (String) toolbar.getTitle());
+
+        PAOK();
 
         FloatingActionButton floatingButton = findViewById(R.id.floatingButton);
         floatingButton.setOnClickListener(new View.OnClickListener() {
@@ -76,5 +83,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void PAOK(){
+
+        Spinner spinner = findViewById(R.id.spinner);
+
+        List<String> categories = new ArrayList<String>();
+        categories.add("Most Recently");
+        categories.add("With Date");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
     }
 }
