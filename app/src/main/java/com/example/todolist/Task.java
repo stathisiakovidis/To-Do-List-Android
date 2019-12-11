@@ -11,12 +11,35 @@ import androidx.room.PrimaryKey;
 public class Task {
 
     @PrimaryKey (autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo(name = "title")
-    public String title;
+    private String title;
 
     @ColumnInfo(name = "body")
-    public String body;
+    private String body;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBody() {
+        return body;
+    }
 }
