@@ -1,5 +1,14 @@
 package com.example.todolist;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,9 +18,11 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class ExampleUnitTest extends AppCompatActivity {
     @Test
+    @Before
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
 }
