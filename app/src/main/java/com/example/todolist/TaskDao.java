@@ -15,6 +15,8 @@ public interface TaskDao {
     @Query("SELECT * FROM task")
     List<Task> getAll();
 
+    @Query("SELECT * FROM task WHERE dayOfMonth = :dayOfMonth AND month = :month AND year = :year")
+    List<Task> getFromThisDay(int dayOfMonth, int month, int year);
     @Insert
     void insert(Task task);
 

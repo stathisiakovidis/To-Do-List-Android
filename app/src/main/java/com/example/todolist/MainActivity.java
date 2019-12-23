@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MyTag";
-
-    //SQLiteDatabase db;
+    public static final int GETALL = 1;
+    public static final int GETFROMTHISDAY = 2;
 
     private AppDatabase db;
 
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //db = getBaseContext().openOrCreateDatabase("todo-db", Context.MODE_PRIVATE, null);
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "todo-db").build();
 
         Save newTask = new Save();
@@ -49,19 +50,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Manually will add some data.
+     * This is a testing phase, it's not intended to be completely functional
+     */
     public class Save extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             Task myTask = new Task();
-            myTask.title = "Titlos";
-            myTask.body  ="i istoria tis zois mou";
+            myTask.setTitle("Title again");
+            myTask.setBody("Story of my life");
+            myTask.setDay((byte) 16);
+            myTask.setYear(2019);
+            myTask.setMonth((byte) 11);
+
 
             db.userDao().insert(myTask);
 
-            Log.i(TAG, "Insert is done");
+            Task secondTask = new Task("Another title",
+                    "This is a small body",
+                    13, 11, 2019);
+
+            db.userDao().insert(secondTask);
+
+            ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
+
+
+            for(Task task: tasks){
+                Log.i(TAG, task.getBody());
+            }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.i(TAG, "Insert is done");
+
         }
     }
 
