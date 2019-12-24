@@ -64,22 +64,25 @@ public class MainActivity extends AppCompatActivity {
             myTask.setDay((byte) 16);
             myTask.setYear(2019);
             myTask.setMonth((byte) 11);
-
-
             db.userDao().insert(myTask);
 
-            Task secondTask = new Task("Another title",
+            Task secondTask = new Task(
+                    "Another title",
                     "This is a small body",
-                    13, 11, 2019);
-
+                    13,
+                    11,
+                    2019);
             db.userDao().insert(secondTask);
 
+            Task thirdTask = new Task(
+                    "Do some shit",
+                    "I really have to do some shit, dude",
+                    24,
+                    11,
+                    2019);
+            db.userDao().insert(thirdTask);
+
             ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
-
-
-            for(Task task: tasks){
-                Log.i(TAG, task.getBody());
-            }
 
             return null;
         }
