@@ -1,13 +1,11 @@
 package com.example.todolist;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -58,6 +54,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendar = findViewById(R.id.calendarView);
         recyclerView = findViewById(R.id.recyclerView);
 
+        Log.i(MainActivity.TAG, String.valueOf(calendar.getDateTextAppearance()));
         try {
 
             final CustomAdapter adapter = new CustomAdapter(
@@ -71,6 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
+
             calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
                 Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
 
@@ -103,11 +101,12 @@ public class CalendarActivity extends AppCompatActivity {
     private int getCurrDayOfMonth(){
         LocalDate currentDate = LocalDate.now();
         return currentDate.getDayOfMonth();
+
     }
 
     private int getCurrMonth(){
         LocalDate currentDate = LocalDate.now();
-        return currentDate.getMonthValue();
+        return currentDate.getMonthValue() - 1;
     }
 
     private int getCurrYear(){

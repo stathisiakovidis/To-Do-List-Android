@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {
 
     private ArrayList<Task> tasks;
     private Context context;
@@ -25,7 +26,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i(MainActivity.TAG, "THIS IS CALLED");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
@@ -33,7 +33,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.i(MainActivity.TAG, "Binding is called");
 
         String currTitle = tasks.get(position).getTitle();
         String currBody = tasks.get(position).getBody();
@@ -45,7 +44,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        Log.i(MainActivity.TAG, "getItemCount is called");
         return tasks.size();
     }
 
@@ -53,7 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         this.tasks = tasks;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView title;
         private TextView body;
@@ -63,6 +61,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.title = itemView.findViewById(R.id.title);
             this.body = itemView.findViewById(R.id.body);
 
+            itemView.setOnClickListener(this::onClick);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "This is a Toast", Toast.LENGTH_SHORT).show();
         }
     }
 }

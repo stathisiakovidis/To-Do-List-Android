@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MyTag";
-    public static final int GETALL = 1;
-    public static final int GETFROMTHISDAY = 2;
 
     private AppDatabase db;
 
@@ -35,13 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setOnClickListener(view ->
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+                .setAction("Action", null).show());
 
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "todo-db").build();
 
