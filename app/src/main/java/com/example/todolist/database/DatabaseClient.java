@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
