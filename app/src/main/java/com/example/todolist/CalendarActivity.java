@@ -50,8 +50,8 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 
         //Add-task button
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(new FabListener());
+
         //Client for database methods
         client = new DatabaseClient(getApplicationContext());
 
