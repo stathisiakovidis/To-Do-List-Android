@@ -8,6 +8,7 @@ import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,12 +22,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class CalendarActivity extends AppCompatActivity /*implements CalendarView.OnDateChangeListener*/ {
+public class CalendarActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener {
 
     private RecyclerView recyclerView;
     private DatabaseClient client;
     private CalendarView calendar;
     private ArrayList<Task> tasks;
+    private CustomAdapter adapter;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class CalendarActivity extends AppCompatActivity /*implements CalendarVie
         Log.i(MainActivity.TAG, String.valueOf(calendar.getDateTextAppearance()));
         try {
 
-            final CustomAdapter adapter = new CustomAdapter(
+            adapter = new CustomAdapter(
                     getApplicationContext(),
                     client.getFromThisDay(
                             getCurrDayOfMonth(),
@@ -68,30 +71,11 @@ public class CalendarActivity extends AppCompatActivity /*implements CalendarVie
 
             recyclerView.setAdapter(adapter);
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
 
-            calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
-
-                try {
-                    tasks = client.getFromThisDay(dayOfMonth, month, year);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                //Change tasks and show the new ones
-                adapter.changeTasks(tasks);
-                adapter.notifyDataSetChanged();
-
-                //Whenever I click a different date, recyclerView scrolls to the top
-                //Otherwise it would stay wherever it was at the moment
-                layoutManager.scrollToPositionWithOffset(0, 0);
-
-
-            });
+            //Add listener to date change
+            calendar.setOnDateChangeListener(this::onSelectedDayChange);
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -117,25 +101,25 @@ public class CalendarActivity extends AppCompatActivity /*implements CalendarVie
         return currentDate.getYear();
     }
 
-//    @Override
-//    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-//        Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
-//
-//        try {
-//            tasks = client.getFromThisDay(dayOfMonth, month, year);
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //Change tasks and show the new ones
-//        adapter.changeTasks(tasks);
-//        adapter.notifyDataSetChanged();
-//
-//        //Whenever I click a different date, recyclerView scrolls to the top
-//        //Otherwise it would stay wherever it was at the moment
-//        layoutManager.scrollToPositionWithOffset(0, 0);
-//
-//    }
+    @Override
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+        Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
+
+        try {
+            tasks = client.getFromThisDay(dayOfMonth, month, year);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Change tasks and show the new ones
+        adapter.changeTasks(tasks);
+        adapter.notifyDataSetChanged();
+
+        //Whenever I click a different date, recyclerView scrolls to the top
+        //Otherwise it would stay wherever it was at the moment
+        layoutManager.scrollToPositionWithOffset(0, 0);
+
+    }
 }
