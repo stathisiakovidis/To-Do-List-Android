@@ -3,6 +3,8 @@ package com.example.todolist;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.todolist.database.DatabaseClient;
+import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,7 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity /*implements CalendarView.OnDateChangeListener*/ {
 
     private RecyclerView recyclerView;
     private DatabaseClient client;
@@ -88,6 +90,7 @@ public class CalendarActivity extends AppCompatActivity {
                 //Otherwise it would stay wherever it was at the moment
                 layoutManager.scrollToPositionWithOffset(0, 0);
 
+
             });
 
         } catch (ExecutionException e) {
@@ -114,4 +117,25 @@ public class CalendarActivity extends AppCompatActivity {
         return currentDate.getYear();
     }
 
+//    @Override
+//    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+//        Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
+//
+//        try {
+//            tasks = client.getFromThisDay(dayOfMonth, month, year);
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        //Change tasks and show the new ones
+//        adapter.changeTasks(tasks);
+//        adapter.notifyDataSetChanged();
+//
+//        //Whenever I click a different date, recyclerView scrolls to the top
+//        //Otherwise it would stay wherever it was at the moment
+//        layoutManager.scrollToPositionWithOffset(0, 0);
+//
+//    }
 }
