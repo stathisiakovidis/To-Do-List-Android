@@ -20,13 +20,14 @@ import android.widget.CalendarView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener {
 
     private RecyclerView recyclerView;
     private DatabaseClient client;
-    private CalendarView calendar;
+    private CalendarView calendarView;
     private ArrayList<Task> tasks;
     private CustomAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -56,18 +57,24 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         client = new DatabaseClient(getApplicationContext());
 
         //Rest of the IDs
-        calendar = findViewById(R.id.calendarView);
+        calendarView = findViewById(R.id.calendarView);
         recyclerView = findViewById(R.id.recyclerView);
 
-        Log.i(MainActivity.TAG, String.valueOf(calendar.getDateTextAppearance()));
+        Log.i(MainActivity.TAG, String.valueOf(calendarView.getDateTextAppearance()));
         try {
+
+            Calendar calendar = Calendar.getInstance();
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
             adapter = new CustomAdapter(
                     getApplicationContext(),
                     client.getFromThisDay(
-                            getCurrDayOfMonth(),
-                            getCurrMonth(),
-                            getCurrYear()));
+                            dayOfMonth,
+                            month,
+                            year));
 
             recyclerView.setAdapter(adapter);
 
@@ -75,7 +82,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
             recyclerView.setLayoutManager(layoutManager);
 
             //Add listener to date change
-            calendar.setOnDateChangeListener(this::onSelectedDayChange);
+            calendarView.setOnDateChangeListener(this::onSelectedDayChange);
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -83,22 +90,6 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
             e.printStackTrace();
         }
 
-    }
-
-    private int getCurrDayOfMonth(){
-        LocalDate currentDate = LocalDate.now();
-        return currentDate.getDayOfMonth();
-
-    }
-
-    private int getCurrMonth(){
-        LocalDate currentDate = LocalDate.now();
-        return currentDate.getMonthValue() - 1;
-    }
-
-    private int getCurrYear(){
-        LocalDate currentDate = LocalDate.now();
-        return currentDate.getYear();
     }
 
     @Override

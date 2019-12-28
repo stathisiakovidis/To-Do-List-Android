@@ -5,8 +5,9 @@
     <string name="calendar">Calendar</string>
     <string name="indefinite">Indefinite</string>
     <string name="title_activity_calendar">CalendarActivity</string>
-    <string name="textview">TextView</string>
-    <string name="default_title">Default Title</string>
+    <string name="default_title">Title</string>
     <string name="default_body">This is a body of an item. Nothing special here. Just a lot of stuff. Hello, my name is Jeff.</string>
-    <string name="title_activity_item">ItemActivity</string>
+    <string name="note">note</string>
+    <string name="date">date</string>
+    <string name="title_activity_item">title activity item</string>
 </resources>

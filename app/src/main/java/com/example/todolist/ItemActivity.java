@@ -1,17 +1,30 @@
 package com.example.todolist;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.todolist.database.Task;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ItemActivity extends AppCompatActivity {
+
+    private EditText title;
+    private TextView dateText;
+    private EditText body;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +40,52 @@ public class ItemActivity extends AppCompatActivity {
             Intent mainIntent = new Intent(this, MainActivity.class);
             startActivity(mainIntent);
         });
+
+        //IDs
+        title = findViewById(R.id.title);
+        dateText = findViewById(R.id.dateText);
+        body = findViewById(R.id.body);
+
+        dateText.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+            int currYear = calendar.get(Calendar.YEAR);
+            int currMonth = calendar.get(Calendar.MONTH);
+            int currDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this,
+                    (datePicker, year, month, day) -> {
+                        dateText.setText(day + "\\" + month + "\\" + year );
+
+                    }, currYear, currMonth, currDay);
+            datePickerDialog.show();
+        });
+
+
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        DatePicker picker;
+
+        String currTitle = title.getText().toString();
+        String currDate = dateText.getText().toString() ;
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        Date myDate;
+        try {
+            myDate = df.parse(currDate);
+            String myText = myDate.getDate() + "-" + (myDate.getMonth() + 1) + "-" + (1900 + myDate.getYear());
+            Log.i(MainActivity.TAG, myText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Task task = new Task();
+
+
+
+    }
 }
