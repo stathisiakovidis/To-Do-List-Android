@@ -6,11 +6,14 @@ import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
+import com.google.android.gms.maps.GoogleMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ public class ItemActivity extends AppCompatActivity {
             startActivity(mainIntent);
         });
 
+
         //IDs
         title = findViewById(R.id.title);
         dateText = findViewById(R.id.dateText);
@@ -63,7 +67,6 @@ public class ItemActivity extends AppCompatActivity {
         if(!currTitle.isEmpty()){
             DatabaseClient client = new DatabaseClient(getApplicationContext());
 
-
             task.setTitle(currTitle);
             task.setBody(currBody);
 
@@ -79,8 +82,46 @@ public class ItemActivity extends AppCompatActivity {
 
     }
 
-    private class DateListener implements View.OnClickListener, View.OnLongClickListener {
+    //Creates option in menu (in example settings)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_item, menu);
 
+        return true;
+    }
+
+    //Change icon
+    //If location is added, then change to "Edit Icon" instead of "Add icon"
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        if (task.isLocation()) {
+            menu.findItem(R.id.map_add).setIcon(R.drawable.ic_edit_location);
+        } else {
+            menu.findItem(R.id.map_add).setIcon(R.drawable.ic_add_location);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.map_add:
+                Log.i(MainActivity.TAG, "Map add option is clicked");
+                break;
+            default:
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private class DateListener implements View.OnClickListener, View.OnLongClickListener {
 
         @Override
         public void onClick(View v) {
@@ -99,7 +140,7 @@ public class ItemActivity extends AppCompatActivity {
                 task.setYear(year);
 
                 //Display the date
-                dateText.setText(day + "\\" + month + "\\" + year);
+                dateText.setText(day + "\\" + (month+1) + "\\" + year);
 
                     }, currYear, currMonth, currDay);
             datePickerDialog.show();
