@@ -25,7 +25,7 @@
     <EditText
         android:id="@+id/body"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:autofillHints=""
@@ -34,7 +34,6 @@
         android:hint="@string/note"
         android:inputType="textCapSentences"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -52,5 +51,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/body" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
