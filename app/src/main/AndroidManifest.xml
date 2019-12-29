@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ItemActivity"
-            android:label="@string/title_activity_item"
+            android:label="ItemActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".CalendarActivity"
