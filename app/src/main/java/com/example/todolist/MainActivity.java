@@ -3,12 +3,10 @@ package com.example.todolist;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.todolist.database.AppDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
 
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +15,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MyTag";
-
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new FabListener());
-
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "todo-db").build();
 
     }
 
