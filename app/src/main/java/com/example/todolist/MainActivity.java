@@ -16,10 +16,6 @@ import androidx.room.Room;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "todo-db").build();
 
-        Save newTask = new Save();
-        newTask.execute();
+//        Save newTask = new Save();
+//        newTask.execute();
 
     }
 
@@ -52,46 +48,46 @@ public class MainActivity extends AppCompatActivity {
      * Manually will add some data.
      * This is a testing phase, it's not intended to be completely functional
      */
-    public class Save extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Task myTask = new Task();
-            myTask.setTitle("Title again");
-            myTask.setBody("Story of my life");
-            myTask.setDay((byte) 16);
-            myTask.setYear(2019);
-            myTask.setMonth((byte) 11);
-            db.userDao().insert(myTask);
-
-            Task secondTask = new Task(
-                    "Another title",
-                    "This is a small body",
-                    13,
-                    11,
-                    2019);
-            db.userDao().insert(secondTask);
-
-            Task thirdTask = new Task(
-                    "Do some shit",
-                    "I really have to do some shit, dude",
-                    24,
-                    11,
-                    2019);
-            db.userDao().insert(thirdTask);
-
-            ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Log.i(TAG, "Insert is done");
-
-        }
-    }
+//    public class Save extends AsyncTask<Void, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            Task myTask = new Task();
+//            myTask.setTitle("Title again");
+//            myTask.setBody("Story of my life");
+//            myTask.setDay((byte) 16);
+//            myTask.setYear(2019);
+//            myTask.setMonth((byte) 11);
+//            db.userDao().insert(myTask);
+//
+//            Task secondTask = new Task(
+//                    "Another title",
+//                    "This is a small body",
+//                    13,
+//                    11,
+//                    2019);
+//            db.userDao().insert(secondTask);
+//
+//            Task thirdTask = new Task(
+//                    "Do some shit",
+//                    "I really have to do some shit, dude",
+//                    24,
+//                    11,
+//                    2019);
+//            db.userDao().insert(thirdTask);
+//
+//            ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            Log.i(TAG, "Insert is done");
+//
+//        }
+//    }
 
     //Creates option in menu (in example settings)
     @Override

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,17 +12,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ItemActivity extends AppCompatActivity {
 
+    private Task task;
     private EditText title;
     private TextView dateText;
     private EditText body;
@@ -46,6 +44,8 @@ public class ItemActivity extends AppCompatActivity {
         dateText = findViewById(R.id.dateText);
         body = findViewById(R.id.body);
 
+        task = new Task();
+
         //Add listeners to date textView
         DateListener dateListener = new DateListener();
         dateText.setOnClickListener(dateListener);
@@ -57,28 +57,29 @@ public class ItemActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        DatePicker picker;
-
         String currTitle = title.getText().toString();
-        String currDate = dateText.getText().toString() ;
+        String currBody = body.getText().toString();
 
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        Date myDate;
-        try {
-            myDate = df.parse(currDate);
-            String myText = myDate.getDate() + "-" + (myDate.getMonth() + 1) + "-" + (1900 + myDate.getYear());
-            Log.i(MainActivity.TAG, myText);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(!currTitle.isEmpty()){
+            DatabaseClient client = new DatabaseClient(getApplicationContext());
+
+
+            task.setTitle(currTitle);
+            task.setBody(currBody);
+
+            client.insert(task);
+
+            Log.i(MainActivity.TAG, "Title: " + currTitle);
+            Log.i(MainActivity.TAG, "Body: " + currBody);
+            Log.i(MainActivity.TAG, "Date: " + task.getDay() + " " + task.getMonth() + " " + task.getYear());
+
+
+            Log.i(MainActivity.TAG, "Insert is done");
         }
-
-        Task task = new Task();
-
-
 
     }
 
-    class DateListener implements View.OnClickListener, View.OnLongClickListener {
+    private class DateListener implements View.OnClickListener, View.OnLongClickListener {
 
 
         @Override
@@ -91,7 +92,14 @@ public class ItemActivity extends AppCompatActivity {
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this,
                     (datePicker, year, month, day) -> {
-                        dateText.setText(day + "\\" + month + "\\" + year );
+
+                //Save date to the current task object
+                task.setDay(day);
+                task.setMonth(month);
+                task.setYear(year);
+
+                //Display the date
+                dateText.setText(day + "\\" + month + "\\" + year);
 
                     }, currYear, currMonth, currDay);
             datePickerDialog.show();

@@ -60,7 +60,6 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         calendarView = findViewById(R.id.calendarView);
         recyclerView = findViewById(R.id.recyclerView);
 
-        Log.i(MainActivity.TAG, String.valueOf(calendarView.getDateTextAppearance()));
         try {
 
             Calendar calendar = Calendar.getInstance();
@@ -98,6 +97,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 
         try {
             tasks = client.getFromThisDay(dayOfMonth, month, year);
+            Log.i(MainActivity.TAG, "Get from this day is done");
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
