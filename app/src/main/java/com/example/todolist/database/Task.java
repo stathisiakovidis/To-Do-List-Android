@@ -28,8 +28,6 @@ public class Task {
     @ColumnInfo(name = "year", defaultValue = "2019")
     private int year;
 
-    private boolean location = false;
-
     public Task(){}
 
     public Task(String title, String body, int dayOfMonth, int month, int year){
@@ -38,14 +36,6 @@ public class Task {
         this.day = dayOfMonth;
         this.month = month;
         this.year = year;
-    }
-
-    public boolean isLocation() {
-        return location;
-    }
-
-    public void setLocation(boolean location) {
-        this.location = location;
     }
 
     public int getDay() {

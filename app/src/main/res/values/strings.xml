@@ -9,6 +9,4 @@
     <string name="default_body">This is a body of an item. Nothing special here. Just a lot of stuff. Hello, my name is Jeff.</string>
     <string name="note">note</string>
     <string name="date">date</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="map">Google Maps</string>
 </resources>
