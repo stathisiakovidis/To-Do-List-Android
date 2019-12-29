@@ -39,6 +39,24 @@ public class DatabaseClient {
 
     }
 
+    //Get all elements
+    public ArrayList<Task> getAll() throws ExecutionException, InterruptedException {
+
+        class Async extends AsyncTask<Void, Void, ArrayList<Task>> {
+
+            @Override
+            protected ArrayList<Task> doInBackground(Void... voids) {
+
+                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
+                return tasks;
+            }
+        }
+
+        Async async = new Async();
+        return async.execute().get();
+
+    }
+
     public void insert(Task task){
 
         class Async extends AsyncTask<Void, Void, Void>{

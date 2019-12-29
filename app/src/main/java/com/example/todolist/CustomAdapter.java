@@ -43,6 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     }
 
+
     @Override
     public int getItemCount() {
         return tasks.size();
@@ -70,5 +71,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public void onClick(View v) {
             Toast.makeText(context, "This is a Toast", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 }
