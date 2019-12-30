@@ -44,10 +44,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 
         //Back button
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener((View v) -> {
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         //Add-task button
         FloatingActionButton fab = findViewById(R.id.fab);

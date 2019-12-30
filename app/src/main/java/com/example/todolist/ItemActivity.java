@@ -33,11 +33,7 @@ public class ItemActivity extends AppCompatActivity {
 
         //Back button
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener((View v) -> {
-            //MUST get as putExtra which intent was the previous one, so it can return to it and not always to main
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         //IDs
         title = findViewById(R.id.title);
