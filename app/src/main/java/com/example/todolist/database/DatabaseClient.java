@@ -76,5 +76,24 @@ public class DatabaseClient {
 
     }
 
+    public void delete(Task task){
+
+        class Async extends AsyncTask<Void, Void, Void>{
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                db.userDao().delete(task);
+                return null;
+            }
+
+        }
+
+        Async async = new Async();
+        async.execute();
+
+
+    }
+
 
 }

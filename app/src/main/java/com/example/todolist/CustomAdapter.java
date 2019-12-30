@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 
 import java.util.ArrayList;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {
 
@@ -72,6 +78,54 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             Toast.makeText(context, "This is a Toast", Toast.LENGTH_SHORT).show();
         }
     }
+
+    //Swipe Gesture for RecyclerView
+    public void recyclerViewGesture(Context context, RecyclerView recyclerView){
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ){
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+            //Swipe left or right
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                DatabaseClient client = new DatabaseClient(context);
+
+                int position = viewHolder.getAdapterPosition();
+                switch (direction){
+                    case ItemTouchHelper.LEFT:
+
+                        //Delete from database
+                        Task currTask = getTasks().get(position);
+                        client.delete(currTask);
+
+                        //Remove from view
+                        getTasks().remove(position);
+                        notifyItemRemoved(position);
+
+                        break;
+                    case ItemTouchHelper.RIGHT:
+
+                        break;
+                }
+            }
+            //Deletion on swipe icon
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(context,R.color.colorAccent))
+                        .addSwipeLeftActionIcon(R.drawable.ic_delete_black_24dp)
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+
 
     public ArrayList<Task> getTasks() {
         return tasks;

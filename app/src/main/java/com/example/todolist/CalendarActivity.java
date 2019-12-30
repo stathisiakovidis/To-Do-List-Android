@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
@@ -9,6 +10,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,8 @@ import android.widget.CalendarView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener {
 
@@ -76,6 +81,8 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
             //Add listener to date change
             calendarView.setOnDateChangeListener(this::onSelectedDayChange);
 
+            adapter.recyclerViewGesture(getApplicationContext(), recyclerView);
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -106,4 +113,5 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         layoutManager.scrollToPositionWithOffset(0, 0);
 
     }
+
 }
