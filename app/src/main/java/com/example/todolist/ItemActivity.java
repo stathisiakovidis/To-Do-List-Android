@@ -1,7 +1,6 @@
 package com.example.todolist;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
