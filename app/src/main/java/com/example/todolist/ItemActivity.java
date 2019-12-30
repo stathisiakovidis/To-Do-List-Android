@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,34 +50,50 @@ public class ItemActivity extends AppCompatActivity {
 
     }
 
+    //Creates option in menu (in example settings)
     @Override
-    protected void onPause() {
-        super.onPause();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_item, menu);
 
-        String currTitle = title.getText().toString();
-        String currBody = body.getText().toString();
+        return true;
+    }
 
-        if(!currTitle.isEmpty()){
-            DatabaseClient client = new DatabaseClient(getApplicationContext());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
+        switch(id){
+            case R.id.action_done:
+                Log.i(MainActivity.TAG, "Done option is clicked");
 
-            task.setTitle(currTitle);
-            task.setBody(currBody);
+                String currTitle = title.getText().toString();
+                String currBody = body.getText().toString();
 
-            client.insert(task);
+                if(!currTitle.isEmpty()){
+                    DatabaseClient client = new DatabaseClient(getApplicationContext());
 
-            Log.i(MainActivity.TAG, "Title: " + currTitle);
-            Log.i(MainActivity.TAG, "Body: " + currBody);
-            Log.i(MainActivity.TAG, "Date: " + task.getDay() + " " + task.getMonth() + " " + task.getYear());
+                    task.setTitle(currTitle);
+                    task.setBody(currBody);
 
+                    client.insert(task);
 
-            Log.i(MainActivity.TAG, "Insert is done");
+                    Log.i(MainActivity.TAG, "Insert is done");
+                }
+
+                finish();
+                break;
+            default:
+
         }
 
+        return super.onOptionsItemSelected(item);
     }
 
     private class DateListener implements View.OnClickListener, View.OnLongClickListener {
-
 
         @Override
         public void onClick(View v) {
