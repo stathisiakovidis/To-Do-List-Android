@@ -3,7 +3,6 @@ package com.example.todolist;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
-import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.widget.CalendarView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
@@ -24,9 +22,9 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     private RecyclerView recyclerView;
     private DatabaseClient client;
     private CalendarView calendarView;
-    private ArrayList<Task> tasks;
     private CustomAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private int dayOfMonth, month, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,20 +85,38 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     }
 
     @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-        Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
-
+    protected void onStart() {
+        super.onStart();
+        Log.i(MainActivity.TAG, "OnStart is called");
+        //Change tasks and show the new ones
         try {
-            tasks = client.getFromThisDay(dayOfMonth, month, year);
-            Log.i(MainActivity.TAG, "Get from this day is done");
+            adapter.changeTasks(client.getFromThisDay(dayOfMonth, month, year));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        adapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+        Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
+        
+        //Initialize these variables so I can use them in OnStart method
+        this.dayOfMonth = dayOfMonth;
+        this.month = month;
+        this.year = year;
 
         //Change tasks and show the new ones
-        adapter.changeTasks(tasks);
+        try {
+            adapter.changeTasks(client.getFromThisDay(dayOfMonth, month, year));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         adapter.notifyDataSetChanged();
 
         //Whenever I click a different date, recyclerView scrolls to the top
