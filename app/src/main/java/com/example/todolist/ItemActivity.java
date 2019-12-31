@@ -24,6 +24,8 @@ public class ItemActivity extends AppCompatActivity {
     private EditText title;
     private TextView dateText;
     private EditText body;
+    private DatabaseClient client;
+    private boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,23 @@ public class ItemActivity extends AppCompatActivity {
         dateText.setOnClickListener(dateListener);
         dateText.setOnLongClickListener(dateListener);
 
+        client = new DatabaseClient(getApplicationContext());
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //Do this only if the task is not saved properly
+        if(!done) {
+
+            task.setType(Task.Type.DRAFT.toString());
+            task.setTitle(title.getText().toString());
+            task.setBody(body.getText().toString());
+
+            client.insert(task);
+        }
     }
 
     //Creates option in menu (in example settings)
@@ -81,10 +100,15 @@ public class ItemActivity extends AppCompatActivity {
 
                     client.insert(task);
 
+                    //The task is saved properly
+                    done = true;
+
                     Log.i(MainActivity.TAG, "Insert is done");
                 }
 
                 finish();
+                break;
+            case R.id.action_calendar:
                 break;
             default:
 
@@ -111,6 +135,8 @@ public class ItemActivity extends AppCompatActivity {
                 task.setMonth(month);
                 task.setYear(year);
 
+                task.setType(Task.Type.DATE.toString());
+
                 //Display the date
                 dateText.setText(day + "\\" + month + "\\" + year);
 
@@ -123,6 +149,12 @@ public class ItemActivity extends AppCompatActivity {
         public boolean onLongClick(View v) {
 
             dateText.setText("date");
+
+            task.setDay(0);
+            task.setMonth(0);
+            task.setYear(0);
+            task.setType(Task.Type.NODATE.toString());
+
             Log.i(MainActivity.TAG, "Long click");
             return true;
         }

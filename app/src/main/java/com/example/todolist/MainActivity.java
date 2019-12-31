@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         client = new DatabaseClient(getApplicationContext());
         try {
 
-            recyclerAdapter = new CustomAdapter(getApplicationContext(),client.getAll());
+            recyclerAdapter = new CustomAdapter(getApplicationContext(),client.getAllDone());
             mainRecyclerView.setAdapter(recyclerAdapter);
             recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
         }catch (ExecutionException e) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "OnStart is called");
         //Change tasks and show the new ones
         try {
-            recyclerAdapter.changeTasks(client.getAll());
+            recyclerAdapter.changeTasks(client.getAllDone());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

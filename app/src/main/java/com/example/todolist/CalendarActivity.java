@@ -103,7 +103,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
-        
+
         //Initialize these variables so I can use them in OnStart method
         this.dayOfMonth = dayOfMonth;
         this.month = month;

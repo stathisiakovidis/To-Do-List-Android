@@ -4,8 +4,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-
-
 //Our database table... kind of
 @Entity
 public class Task {
@@ -28,6 +26,9 @@ public class Task {
     @ColumnInfo(name = "year", defaultValue = "2019")
     private int year;
 
+    @ColumnInfo(name = "type", defaultValue = "NODATE")
+    private String type;
+
     public Task(){}
 
     public Task(String title, String body, int dayOfMonth, int month, int year){
@@ -36,7 +37,11 @@ public class Task {
         this.day = dayOfMonth;
         this.month = month;
         this.year = year;
+
+        //It has a date
+        type = Type.DATE.toString();
     }
+
 
     public int getDay() {
         return day;
@@ -84,5 +89,17 @@ public class Task {
 
     public int getMonth() {
         return month;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public enum Type{
+        DRAFT, DATE, NODATE
     }
 }
