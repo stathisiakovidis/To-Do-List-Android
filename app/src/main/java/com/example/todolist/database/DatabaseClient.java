@@ -40,14 +40,14 @@ public class DatabaseClient {
     }
 
     //Get all elements
-    public ArrayList<Task> getAll() throws ExecutionException, InterruptedException {
+    public ArrayList<Task> getAllDone() throws ExecutionException, InterruptedException {
 
         class Async extends AsyncTask<Void, Void, ArrayList<Task>> {
 
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAll();
+                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAllDone();
                 return tasks;
             }
         }

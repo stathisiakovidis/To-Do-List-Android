@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ public class ItemActivity extends AppCompatActivity {
     private EditText title;
     private TextView dateText;
     private EditText body;
+    private DatabaseClient client;
+    private boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,36 +50,74 @@ public class ItemActivity extends AppCompatActivity {
         dateText.setOnClickListener(dateListener);
         dateText.setOnLongClickListener(dateListener);
 
+        client = new DatabaseClient(getApplicationContext());
+
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
 
-        String currTitle = title.getText().toString();
-        String currBody = body.getText().toString();
+        //Do this only if the task is not saved properly
+        if(!done) {
 
-        if(!currTitle.isEmpty()){
-            DatabaseClient client = new DatabaseClient(getApplicationContext());
-
-
-            task.setTitle(currTitle);
-            task.setBody(currBody);
+            task.setType(Task.Type.DRAFT.toString());
+            task.setTitle(title.getText().toString());
+            task.setBody(body.getText().toString());
 
             client.insert(task);
+        }
+    }
 
-            Log.i(MainActivity.TAG, "Title: " + currTitle);
-            Log.i(MainActivity.TAG, "Body: " + currBody);
-            Log.i(MainActivity.TAG, "Date: " + task.getDay() + " " + task.getMonth() + " " + task.getYear());
+    //Creates option in menu (in example settings)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_item, menu);
 
+        return true;
+    }
 
-            Log.i(MainActivity.TAG, "Insert is done");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.action_done:
+                Log.i(MainActivity.TAG, "Done option is clicked");
+
+                String currTitle = title.getText().toString();
+                String currBody = body.getText().toString();
+
+                if(!currTitle.isEmpty()){
+                    DatabaseClient client = new DatabaseClient(getApplicationContext());
+
+                    task.setTitle(currTitle);
+                    task.setBody(currBody);
+
+                    client.insert(task);
+
+                    //The task is saved properly
+                    done = true;
+
+                    Log.i(MainActivity.TAG, "Insert is done");
+                }
+
+                finish();
+                break;
+            case R.id.action_calendar:
+                break;
+            default:
+
         }
 
+        return super.onOptionsItemSelected(item);
     }
 
     private class DateListener implements View.OnClickListener, View.OnLongClickListener {
-
 
         @Override
         public void onClick(View v) {
@@ -93,6 +135,8 @@ public class ItemActivity extends AppCompatActivity {
                 task.setMonth(month);
                 task.setYear(year);
 
+                task.setType(Task.Type.DATE.toString());
+
                 //Display the date
                 dateText.setText(day + "\\" + month + "\\" + year);
 
@@ -105,6 +149,12 @@ public class ItemActivity extends AppCompatActivity {
         public boolean onLongClick(View v) {
 
             dateText.setText("date");
+
+            task.setDay(0);
+            task.setMonth(0);
+            task.setYear(0);
+            task.setType(Task.Type.NODATE.toString());
+
             Log.i(MainActivity.TAG, "Long click");
             return true;
         }
