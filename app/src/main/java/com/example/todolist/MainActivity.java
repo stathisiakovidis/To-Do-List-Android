@@ -14,7 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new FabListener());
+
+        //Setting up Spinner to categorize notes by date, by most recently or by drafts
+        Spinner spinner = findViewById(R.id.spinner);
+        spinnerChoice(spinner);
 
         //Setting Notes as main content
         mainRecyclerView = findViewById(R.id.main_recycler_view);
@@ -87,6 +99,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void spinnerChoice (Spinner spinner){
+
+        List<String> choices = new ArrayList<>();
+        choices.add("Most Recently");
+        choices.add("By Date");
+        choices.add("Drafts");
+
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,R.layout.spinner_item,choices);
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
     }
 
 }
