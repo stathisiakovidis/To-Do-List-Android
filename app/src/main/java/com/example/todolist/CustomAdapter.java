@@ -1,12 +1,13 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -46,7 +47,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         holder.title.setText(currTitle);
         holder.body.setText(currBody);
-
+        holder.id = tasks.get(position).getId();
     }
 
 
@@ -63,6 +64,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         private TextView title;
         private TextView body;
+        private int id;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,7 +77,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "This is a Toast", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "This is a Toast", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(v.getContext(), ItemActivity.class);
+
+            //Log.i(MainActivity.TAG, "ID is: " );
+
+            intent.putExtra("id", id);
+            v.getContext().startActivity(intent);
         }
     }
 

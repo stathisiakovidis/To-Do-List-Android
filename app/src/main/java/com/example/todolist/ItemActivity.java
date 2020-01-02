@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
@@ -16,7 +17,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 public class ItemActivity extends AppCompatActivity {
 
@@ -26,7 +30,7 @@ public class ItemActivity extends AppCompatActivity {
     private EditText body;
     private DatabaseClient client;
     private boolean done = false;
-
+    private boolean isUpdate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +47,51 @@ public class ItemActivity extends AppCompatActivity {
         dateText = findViewById(R.id.dateText);
         body = findViewById(R.id.body);
 
+        client = new DatabaseClient(getApplicationContext());
+
         task = new Task();
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("id", -1);
+
+        if(id != -1){
+            try {
+
+                task = client.getSpecific(id);
+
+                isUpdate = true;
+
+                fillItems(task);
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         //Add listeners to date textView
         DateListener dateListener = new DateListener();
         dateText.setOnClickListener(dateListener);
         dateText.setOnLongClickListener(dateListener);
 
-        client = new DatabaseClient(getApplicationContext());
+    }
 
+    private void fillItems(Task task) {
 
+        if(task.getType().equals("DATE")) {
+
+            Log.i(MainActivity.TAG, "Type: " + task.getType());
+            Calendar calendar = task.getCalendar();
+            LocalDate localDate = calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int day = localDate.getDayOfMonth();
+            int month = localDate.getMonthValue();
+            int year = localDate.getYear();
+
+            dateText.setText(day + "\\" + month + "\\" + year);
+        }
+        title.setText(task.getTitle());
+        body.setText(task.getBody());
     }
 
     @Override
@@ -66,7 +105,10 @@ public class ItemActivity extends AppCompatActivity {
             task.setTitle(title.getText().toString());
             task.setBody(body.getText().toString());
 
-            client.insert(task);
+            if(!isUpdate)
+                client.insert(task);
+            else
+                client.update(task);
         }
     }
 
@@ -99,8 +141,10 @@ public class ItemActivity extends AppCompatActivity {
                     task.setTitle(currTitle);
                     task.setBody(currBody);
 
-                    client.insert(task);
-
+                    if(!isUpdate)
+                        client.insert(task);
+                    else
+                        client.update(task);
                     //The task is saved properly
                     done = true;
 

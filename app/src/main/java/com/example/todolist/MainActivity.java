@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         Log.i(TAG, "OnStart is called");
         //Change tasks and show the new ones
         try {

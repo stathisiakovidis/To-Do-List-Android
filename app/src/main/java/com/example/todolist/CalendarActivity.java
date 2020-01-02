@@ -63,10 +63,8 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 //            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
 //            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
 
-            Log.i(MainActivity.TAG, String.valueOf(calendar.getTimeInMillis()));
-            //MIGHT BE WRONG
             adapter = new CustomAdapter(
-                    getApplicationContext(),
+                    this,
                     client.getFromThisDay(calendar.getTimeInMillis()));
 
             recyclerView.setAdapter(adapter);
@@ -88,9 +86,9 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(MainActivity.TAG, "OnStart is called");
+    protected void onResume() {
+        super.onResume();
+        Log.i(MainActivity.TAG, "OnResume is called");
         //Change tasks and show the new ones
         try {
             adapter.changeTasks(client.getFromThisDay(calendar.getTimeInMillis()));

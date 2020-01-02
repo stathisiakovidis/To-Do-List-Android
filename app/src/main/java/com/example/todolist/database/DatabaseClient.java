@@ -57,6 +57,23 @@ public class DatabaseClient {
 
     }
 
+    public Task getSpecific(int id) throws ExecutionException, InterruptedException {
+
+        class Async extends AsyncTask<Void, Void, Task> {
+
+            @Override
+            protected Task doInBackground(Void... voids) {
+
+                Task task = db.userDao().getSpecific(id);
+                return task;
+            }
+        }
+
+        Async async = new Async();
+        return async.execute().get();
+
+    }
+
     public void insert(Task task){
 
         class Async extends AsyncTask<Void, Void, Void>{
@@ -72,8 +89,23 @@ public class DatabaseClient {
 
         Async async = new Async();
         async.execute();
+    }
 
+    public void update(Task task){
 
+        class Async extends AsyncTask<Void, Void, Void>{
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                db.userDao().update(task);
+                return null;
+            }
+
+        }
+
+        Async async = new Async();
+        async.execute();
     }
 
     public void delete(Task task){

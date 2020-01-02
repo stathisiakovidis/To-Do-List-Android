@@ -1,5 +1,6 @@
 package com.example.todolist.database;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -22,10 +23,13 @@ public class Task {
     @ColumnInfo(name = "type", defaultValue = "NODATE")
     private String type;
 
+    @Nullable
     @ColumnInfo(name = "calendar")
     private Calendar calendar;
 
-    public Task(){}
+    public Task(){
+        type = Type.NODATE.toString();
+    }
 
     public Calendar getCalendar() {
         return calendar;
