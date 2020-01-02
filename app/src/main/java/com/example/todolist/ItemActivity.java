@@ -52,6 +52,7 @@ public class ItemActivity extends AppCompatActivity {
 
         client = new DatabaseClient(getApplicationContext());
 
+
     }
 
     @Override
@@ -130,15 +131,20 @@ public class ItemActivity extends AppCompatActivity {
             DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this,
                     (datePicker, year, month, day) -> {
 
-                //Save date to the current task object
-                task.setDay(day);
-                task.setMonth(month);
-                task.setYear(year);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+
+                task.setCalendar(calendar);
 
                 task.setType(Task.Type.DATE.toString());
 
                 //Display the date
-                dateText.setText(day + "\\" + month + "\\" + year);
+                dateText.setText(day + "\\" + (month+1) + "\\" + year);
 
                     }, currYear, currMonth, currDay);
             datePickerDialog.show();
@@ -150,9 +156,9 @@ public class ItemActivity extends AppCompatActivity {
 
             dateText.setText("date");
 
-            task.setDay(0);
-            task.setMonth(0);
-            task.setYear(0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(0);
+
             task.setType(Task.Type.NODATE.toString());
 
             Log.i(MainActivity.TAG, "Long click");

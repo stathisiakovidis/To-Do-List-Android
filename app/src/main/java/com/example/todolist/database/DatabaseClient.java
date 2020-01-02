@@ -22,14 +22,14 @@ public class DatabaseClient {
     }
 
     //Get every task user has to do in this particular day
-    public ArrayList<Task> getFromThisDay(int dayOfTheMonth, int month, int year) throws ExecutionException, InterruptedException {
+    public ArrayList<Task> getFromThisDay(long timeInMillis) throws ExecutionException, InterruptedException {
 
         class Async extends AsyncTask<Void, Void, ArrayList<Task>> {
 
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getFromThisDay(dayOfTheMonth, month, year);
+                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getFromThisDay(timeInMillis);
                 return tasks;
             }
         }
