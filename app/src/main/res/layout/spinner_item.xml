@@ -6,7 +6,7 @@
     android:textColor="#ffff"
     android:textStyle="normal"
     android:textSize="18sp"
-    android:fontFamily="sans-serif-condensed-medium"
+    android:fontFamily="sans-serif-medium"
     android:background="?attr/colorPrimary">
 
 </TextView>

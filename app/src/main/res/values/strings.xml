@@ -7,7 +7,7 @@
     <string name="title_activity_calendar">CalendarActivity</string>
     <string name="default_title">Title</string>
     <string name="default_body">This is a body of an item. Nothing special here. Just a lot of stuff. Hello, my name is Jeff.</string>
-    <string name="note">note</string>
-    <string name="date">date</string>
+    <string name="note">Note</string>
+    <string name="date">Date</string>
     <string name="done">Done</string>
 </resources>
