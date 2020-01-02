@@ -8,7 +8,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-
 @Dao
 public interface TaskDao {
 
@@ -16,8 +15,12 @@ public interface TaskDao {
     @Query("SELECT * FROM task WHERE type != 'DRAFT'")
     List<Task> getAllDone();
 
-    @Query("SELECT * FROM task WHERE dayOfMonth = :dayOfMonth AND month = :month AND year = :year")
-    List<Task> getFromThisDay(int dayOfMonth, int month, int year);
+    @Query("SELECT * FROM task WHERE calendar = :timeInMillis")
+    List<Task> getFromThisDay(long timeInMillis);
+
+    @Query("SELECT * FROM task WHERE id = :id")
+    Task getSpecific(int id);
+
     @Insert
     void insert(Task task);
 

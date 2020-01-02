@@ -1,8 +1,11 @@
 package com.example.todolist.database;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.Calendar;
 
 //Our database table... kind of
 @Entity
@@ -17,50 +20,23 @@ public class Task {
     @ColumnInfo(name = "body")
     private String body;
 
-    @ColumnInfo(name = "dayOfMonth", defaultValue = "13")
-    private int day;
-
-    @ColumnInfo(name = "month", defaultValue = "12")
-    private int month;
-
-    @ColumnInfo(name = "year", defaultValue = "2019")
-    private int year;
-
     @ColumnInfo(name = "type", defaultValue = "NODATE")
     private String type;
 
-    public Task(){}
+    @Nullable
+    @ColumnInfo(name = "calendar")
+    private Calendar calendar;
 
-    public Task(String title, String body, int dayOfMonth, int month, int year){
-        this.title = title;
-        this.body = body;
-        this.day = dayOfMonth;
-        this.month = month;
-        this.year = year;
-
-        //It has a date
-        type = Type.DATE.toString();
+    public Task(){
+        type = Type.NODATE.toString();
     }
 
-
-    public int getDay() {
-        return day;
+    public Calendar getCalendar() {
+        return calendar;
     }
 
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     public void setId(int id) {
@@ -85,10 +61,6 @@ public class Task {
 
     public String getBody() {
         return body;
-    }
-
-    public int getMonth() {
-        return month;
     }
 
     public String getType() {

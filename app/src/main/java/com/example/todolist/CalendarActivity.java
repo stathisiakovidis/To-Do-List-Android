@@ -24,7 +24,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     private CalendarView calendarView;
     private CustomAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private int dayOfMonth, month, year;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +53,19 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 
         try {
 
-            Calendar calendar = Calendar.getInstance();
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
 
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+//            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+//            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+//            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
 
             adapter = new CustomAdapter(
-                    getApplicationContext(),
-                    client.getFromThisDay(
-                            dayOfMonth,
-                            month,
-                            year));
+                    this,
+                    client.getFromThisDay(calendar.getTimeInMillis()));
 
             recyclerView.setAdapter(adapter);
 
@@ -85,12 +86,12 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(MainActivity.TAG, "OnStart is called");
+    protected void onResume() {
+        super.onResume();
+        Log.i(MainActivity.TAG, "OnResume is called");
         //Change tasks and show the new ones
         try {
-            adapter.changeTasks(client.getFromThisDay(dayOfMonth, month, year));
+            adapter.changeTasks(client.getFromThisDay(calendar.getTimeInMillis()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -105,13 +106,14 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         Log.i(MainActivity.TAG, "This is " + dayOfMonth + " of " + month);
 
         //Initialize these variables so I can use them in OnStart method
-        this.dayOfMonth = dayOfMonth;
-        this.month = month;
-        this.year = year;
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+
 
         //Change tasks and show the new ones
         try {
-            adapter.changeTasks(client.getFromThisDay(dayOfMonth, month, year));
+            adapter.changeTasks(client.getFromThisDay(calendar.getTimeInMillis()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
