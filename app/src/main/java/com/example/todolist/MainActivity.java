@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
+import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -40,24 +43,21 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new FabListener());
 
-        //Setting up Spinner to categorize notes by date, by most recently or by drafts
-        Spinner spinner = findViewById(R.id.spinner);
-        spinnerChoice(spinner);
-
         //Setting Notes as main content
         mainRecyclerView = findViewById(R.id.main_recycler_view);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
         try {
-
-            recyclerAdapter = new CustomAdapter(getApplicationContext(),client.getAllDone());
-            mainRecyclerView.setAdapter(recyclerAdapter);
-            recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
-        }catch (ExecutionException e) {
+            recyclerAdapter= new CustomAdapter(getApplicationContext(),client.getAllDone());
+        } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        //Setting up Spinner to categorize notes by date, by most recently or by drafts
+        Spinner spinner = findViewById(R.id.spinner);
+        spinnerChoice(spinner);
 
     }
 
@@ -125,7 +125,44 @@ public class MainActivity extends AppCompatActivity {
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(spinnerArrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = adapterView.getItemAtPosition(i).toString();
+                try {
+                    if (selectedItem.equals("Most Recently")){
+                        recyclerAdapter.changeTasks(reverseList(client.getAllDone()));
+                        mainRecyclerView.setAdapter(recyclerAdapter);
+                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                    }else if(selectedItem.equals("By Date")){
+                        recyclerAdapter.changeTasks(client.getDateNotes());
+                        mainRecyclerView.setAdapter(recyclerAdapter);
+                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                    }else if (selectedItem.equals("Drafts")){
+                        recyclerAdapter.changeTasks(client.getDraft());
+                        mainRecyclerView.setAdapter(recyclerAdapter);
+                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                    }
+                }catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    //Reverse Task List to show the most recently
+    public ArrayList<Task> reverseList(ArrayList<Task> list) {
+        for(int i = 0, j = list.size() - 1; i < j; i++) {
+            list.add(i, list.remove(j));
+        }
+        return list;
     }
 
 }

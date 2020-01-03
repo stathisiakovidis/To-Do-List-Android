@@ -15,11 +15,17 @@ public interface TaskDao {
     @Query("SELECT * FROM task WHERE type != 'DRAFT'")
     List<Task> getAllDone();
 
+    @Query("SELECT * FROM task WHERE type == 'DRAFT'")
+    List<Task> getDraft();
+
     @Query("SELECT * FROM task WHERE calendar = :timeInMillis")
     List<Task> getFromThisDay(long timeInMillis);
 
     @Query("SELECT * FROM task WHERE id = :id")
     Task getSpecific(int id);
+
+    @Query("SELECT * FROM task WHERE type == 'DATE'")
+    List<Task> getDateNotes();
 
     @Insert
     void insert(Task task);

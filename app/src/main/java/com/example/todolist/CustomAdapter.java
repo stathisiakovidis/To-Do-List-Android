@@ -18,7 +18,6 @@ import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 
 import java.util.ArrayList;
-
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {

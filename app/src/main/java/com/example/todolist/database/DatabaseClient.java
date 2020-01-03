@@ -57,6 +57,42 @@ public class DatabaseClient {
 
     }
 
+    //Get Notes with Date
+    public ArrayList<Task> getDateNotes() throws ExecutionException, InterruptedException {
+
+        class Async extends AsyncTask<Void, Void, ArrayList<Task>> {
+
+            @Override
+            protected ArrayList<Task> doInBackground(Void... voids) {
+
+                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getDateNotes();
+                return tasks;
+            }
+        }
+
+        Async async = new Async();
+        return async.execute().get();
+
+    }
+
+    //Get Notes with Date
+    public ArrayList<Task> getDraft() throws ExecutionException, InterruptedException {
+
+        class Async extends AsyncTask<Void, Void, ArrayList<Task>> {
+
+            @Override
+            protected ArrayList<Task> doInBackground(Void... voids) {
+
+                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getDraft();
+                return tasks;
+            }
+        }
+
+        Async async = new Async();
+        return async.execute().get();
+
+    }
+
     public Task getSpecific(int id) throws ExecutionException, InterruptedException {
 
         class Async extends AsyncTask<Void, Void, Task> {
