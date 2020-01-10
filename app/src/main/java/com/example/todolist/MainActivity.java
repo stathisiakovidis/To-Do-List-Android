@@ -1,14 +1,19 @@
 package com.example.todolist;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mainRecyclerView;
     private CustomAdapter recyclerAdapter;
     private DatabaseClient client;
+    private int STORAGE_PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,22 +50,47 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new FabListener());
 
+
         //Setting Notes as main content
         mainRecyclerView = findViewById(R.id.main_recycler_view);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
-        try {
-            recyclerAdapter= new CustomAdapter(getApplicationContext(),client.getAllDone());
-        } catch (ExecutionException e) {
+        recyclerAdapter = new CustomAdapter(getApplicationContext(),null);
+        if(ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            try {
+             recyclerAdapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+         } catch (ExecutionException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+         } catch (InterruptedException e) {
             e.printStackTrace();
+            }
+        }else {
+            requestStoragePermission();
         }
-
         //Setting up Spinner to categorize notes by date, by most recently or by drafts
         Spinner spinner = findViewById(R.id.spinner);
         spinnerChoice(spinner);
 
+    }
+
+    private void requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+
+        }else{
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this,"Permission granted", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
