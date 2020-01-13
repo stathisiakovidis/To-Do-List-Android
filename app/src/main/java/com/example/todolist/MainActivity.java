@@ -1,6 +1,8 @@
 package com.example.todolist;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -27,8 +29,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static com.example.todolist.Constants.MULTIPLE_PERMISSION_CODE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mainRecyclerView;
     private CustomAdapter recyclerAdapter;
     private DatabaseClient client;
-    private int STORAGE_PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,42 +61,24 @@ public class MainActivity extends AppCompatActivity {
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
         recyclerAdapter = new CustomAdapter(getApplicationContext(),null);
-        if(ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+        if(checkAndRequestPermissions()) {
+
             try {
-             recyclerAdapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
-         } catch (ExecutionException e) {
-            e.printStackTrace();
-         } catch (InterruptedException e) {
-            e.printStackTrace();
+                recyclerAdapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }else {
-            requestStoragePermission();
         }
+
         //Setting up Spinner to categorize notes by date, by most recently or by drafts
         Spinner spinner = findViewById(R.id.spinner);
         spinnerChoice(spinner);
 
     }
 
-    private void requestStoragePermission() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
-
-        }else{
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == STORAGE_PERMISSION_CODE){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this,"Permission granted", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this,"Permission denied",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -145,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    //Spinner Settings to show selected notes by category
     public void spinnerChoice (Spinner spinner){
 
         List<String> choices = new ArrayList<>();
@@ -195,6 +182,88 @@ public class MainActivity extends AppCompatActivity {
             list.add(i, list.remove(j));
         }
         return list;
+    }
+
+    //Permissions Control and Request
+    private boolean checkAndRequestPermissions() {
+        int permissionStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (permissionStorage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
+                    MULTIPLE_PERMISSION_CODE);
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSION_CODE: {
+
+                Map<String, Integer> perms = new HashMap<>();
+                // Initialize the map with both permissions
+                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+                    // Check for both permissions
+                    if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "Storage & Location services permission granted");
+                        // process the normal flow
+                        //else any one or both the permissions are not granted
+                    } else {
+                        Log.d(TAG, "Some permissions are not granted ask again ");
+                        //permission is denied (this is the first time, when "never ask again" is not checked)
+                        //so ask again explaining the usage of permission
+                        //shouldShowRequestPermissionRationale will return true
+                        //show the dialog or snackbar saying its necessary and try again otherwise proceed with setup.
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                            showDialogOK("Storage and Location Services Permission required for this app",
+                                    (dialog, which) -> {
+                                        switch (which) {
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                checkAndRequestPermissions();
+                                                break;
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                // proceed with logic by disabling the related features or quit the app.
+                                                break;
+                                        }
+                                    });
+                        }
+                        //permission is denied (and never ask again is checked)
+                        //shouldShowRequestPermissionRationale will return false
+                        else {
+                            Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG)
+                                    .show();
+                            //proceed with logic by disabling the related features or quit the app.
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show();
     }
 
 }
