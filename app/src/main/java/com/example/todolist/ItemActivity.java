@@ -59,7 +59,7 @@ public class ItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if(checkMapServices()){
-            BlankFragment fragment = new BlankFragment();
+            MapFragment fragment = new MapFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
         }

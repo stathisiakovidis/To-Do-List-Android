@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import static com.example.todolist.Constants.MAPS_API_KEY;
 
 
-public class BlankFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,8 +34,8 @@ public class BlankFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
 
 
-    public static BlankFragment newInstance() {
-        return new BlankFragment();
+    public static MapFragment newInstance() {
+        return new MapFragment();
     }
 
     @Override
@@ -42,13 +45,14 @@ public class BlankFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Log.e(MainActivity.TAG, MAPS_API_KEY);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_blank, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = (MapView) view.findViewById(R.id.map);
         initGoogleMap(savedInstanceState);
 
@@ -65,7 +69,7 @@ public class BlankFragment extends Fragment implements OnMapReadyCallback {
         }
         mMapView.onCreate(mapViewBundle);
 
-        mMapView.getMapAsync(BlankFragment.this);
+        mMapView.getMapAsync(MapFragment.this);
     }
 
     //This is MapView part
@@ -107,14 +111,14 @@ public class BlankFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
-        mMapView.onPause();
         super.onPause();
+        mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
-        mMapView.onDestroy();
         super.onDestroy();
+        mMapView.onDestroy();
     }
 
     @Override

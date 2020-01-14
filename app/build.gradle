@@ -14,7 +14,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY']
     }
     buildTypes {
         release {
@@ -22,6 +21,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildTypes {
+        release {
+
+            buildConfigField "String", "DBREST", "\"DB REST RELEASE\""
+            resValue "string", "apikey", apikeyProperties['apikey']
+
+        }
+        debug {
+
+            buildConfigField "String", "DBREST", "\"DB REST RELEASE\""
+            resValue "string", "apikey", apikeyProperties['apikey']
+
+        }
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/map_container">
 
-        <include layout="@layout/fragment_blank"/>
+        <include layout="@layout/fragment_map"/>
         
     </RelativeLayout>
 
