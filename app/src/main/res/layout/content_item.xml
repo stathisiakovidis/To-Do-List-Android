@@ -34,6 +34,7 @@
         android:hint="@string/note"
         android:inputType="textCapSentences"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/map_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -52,13 +53,16 @@
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<fragment
-        android:id="@+id/map"
-        android:name="com.example.todolist.BlankFragment"
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="230dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />-->
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/map_container">
+
+        <include layout="@layout/fragment_blank"/>
+        
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

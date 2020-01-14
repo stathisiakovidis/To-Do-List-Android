@@ -59,7 +59,9 @@ public class ItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if(checkMapServices()){
-            //runMap();
+            BlankFragment fragment = new BlankFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
         }
 
         //Back button
@@ -263,7 +265,6 @@ public class ItemActivity extends AppCompatActivity {
     * the device we are targeting. Also if for some case user refused to enable
     * GPS, we force him to do it by accessing to his settings section
     */
-
     //Check google services
     public boolean isServicesOK(){
 
