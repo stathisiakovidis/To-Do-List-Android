@@ -67,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 adapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
                 recyclerView.setAdapter(adapter);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -88,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
         //Change tasks and show the new ones
         try {
             adapter.setTasks(client.getAllDone());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         adapter.notifyDataSetChanged();
@@ -145,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         choices.add("By Date");
         choices.add("Drafts");
 
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,R.layout.spinner_item,choices);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,R.layout.spinner_item,choices);
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(spinnerArrayAdapter);
@@ -154,19 +150,21 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
                 try {
-                    if (selectedItem.equals("Most Recently")){
-                        adapter.setTasks(client.getAllDone());
-                    }else if(selectedItem.equals("By Date")){
-                        adapter.setTasks(client.getDateNotes());
-                    }else if (selectedItem.equals("Drafts")){
-                        adapter.setTasks(client.getDraft());
+                    switch (selectedItem) {
+                        case "Most Recently":
+                            adapter.setTasks(client.getAllDone());
+                            break;
+                        case "By Date":
+                            adapter.setTasks(client.getDateNotes());
+                            break;
+                        case "Drafts":
+                            adapter.setTasks(client.getDraft());
+                            break;
                     }
 
                     adapter.recyclerViewGesture(getApplicationContext(), recyclerView);
 
-                }catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                }catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -227,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                         //show the dialog or snackbar saying its necessary and try again otherwise proceed with setup.
                         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                            showDialogOK("Storage and Location Services Permission required for this app",
+                            showDialogOK(
                                     (dialog, which) -> {
                                         switch (which) {
                                             case DialogInterface.BUTTON_POSITIVE:
@@ -252,9 +250,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+    private void showDialogOK(DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
-                .setMessage(message)
+                .setMessage("Storage and Location Services Permission required for this app")
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", okListener)
                 .create()
