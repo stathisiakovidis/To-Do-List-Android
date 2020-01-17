@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 recyclerAdapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+                mainRecyclerView.setAdapter(recyclerAdapter);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "OnStart is called");
         //Change tasks and show the new ones
         try {
-            recyclerAdapter.changeTasks(client.getAllDone());
+            recyclerAdapter.setTasks(client.getAllDone());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -150,18 +151,15 @@ public class MainActivity extends AppCompatActivity {
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
                 try {
                     if (selectedItem.equals("Most Recently")){
-                        recyclerAdapter.changeTasks(reverseList(client.getAllDone()));
-                        mainRecyclerView.setAdapter(recyclerAdapter);
-                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                        recyclerAdapter.setTasks(client.getAllDone());
                     }else if(selectedItem.equals("By Date")){
-                        recyclerAdapter.changeTasks(client.getDateNotes());
-                        mainRecyclerView.setAdapter(recyclerAdapter);
-                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                        recyclerAdapter.setTasks(client.getDateNotes());
                     }else if (selectedItem.equals("Drafts")){
-                        recyclerAdapter.changeTasks(client.getDraft());
-                        mainRecyclerView.setAdapter(recyclerAdapter);
-                        recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                        recyclerAdapter.setTasks(client.getDraft());
                     }
+
+                    recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+
                 }catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -176,13 +174,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //Reverse Task List to show the most recently
-    public ArrayList<Task> reverseList(ArrayList<Task> list) {
-        for(int i = 0, j = list.size() - 1; i < j; i++) {
-            list.add(i, list.remove(j));
-        }
-        return list;
-    }
 
     //Permissions Control and Request
     private boolean checkAndRequestPermissions() {

@@ -91,7 +91,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         Log.i(MainActivity.TAG, "OnResume is called");
         //Change tasks and show the new ones
         try {
-            adapter.changeTasks(client.getFromThisDay(calendar.getTimeInMillis()));
+            adapter.setTasks(client.getFromThisDay(calendar.getTimeInMillis()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -113,7 +113,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 
         //Change tasks and show the new ones
         try {
-            adapter.changeTasks(client.getFromThisDay(calendar.getTimeInMillis()));
+            adapter.setTasks(client.getFromThisDay(calendar.getTimeInMillis()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

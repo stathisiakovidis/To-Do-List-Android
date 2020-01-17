@@ -55,7 +55,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return tasks.size();
     }
 
-    public void changeTasks(ArrayList<Task> tasks){
+    public void setTasks(ArrayList<Task> tasks){
         this.tasks = tasks;
     }
 
@@ -132,6 +132,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+
+    //Reverse Task List to show the most recently
+    public ArrayList<Task> reverseList(ArrayList<Task> list) {
+        for(int i = 0, j = list.size() - 1; i < j; i++) {
+            list.add(i, list.remove(j));
+        }
+        return list;
+    }
 
 
     public ArrayList<Task> getTasks() {

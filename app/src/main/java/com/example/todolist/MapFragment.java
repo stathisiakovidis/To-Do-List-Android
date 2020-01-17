@@ -72,17 +72,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Geocoder geocoder = new Geocoder(getContext());
                     try {
                         addressList = geocoder.getFromLocationName(location, 1);
+
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                        Log.i(MainActivity.TAG, latLng.toString());
+                        if (marker!=null){
+                            marker.remove();
+                        }
+                        marker = map.addMarker(new MarkerOptions().position(latLng));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
-                    Log.i(MainActivity.TAG, latLng.toString());
-                    if (marker!=null){
-                        marker.remove();
-                    }
-                    marker = map.addMarker(new MarkerOptions().position(latLng));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,5));
 
                 }
                 return false;
