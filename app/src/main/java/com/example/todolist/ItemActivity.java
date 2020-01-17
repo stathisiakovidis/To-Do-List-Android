@@ -58,13 +58,6 @@ public class ItemActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(checkMapServices()){
-            MapFragment fragment = new MapFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
-                    .addToBackStack(null).commit();
-        }
-
         //Back button
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -95,6 +88,14 @@ public class ItemActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        //Initialize map fragment
+        if(checkMapServices()){
+            MapFragment fragment = new MapFragment(task, client, id);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                    .addToBackStack(null).commit();
         }
 
         //Add listeners to date textView

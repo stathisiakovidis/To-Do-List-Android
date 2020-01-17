@@ -13,10 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.example.todolist.database.DatabaseClient;
+import com.example.todolist.database.Task;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.todolist.Constants.MAPS_API_KEY;
@@ -35,9 +36,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private SearchView mSearchView;
     private GoogleMap map;
     private Marker marker;
+    private Task currTask;
+    private DatabaseClient client;
+    private int checkId;
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    public  MapFragment (Task task, DatabaseClient client, int id) {
+        this.currTask = task;
+        this.client = client;
+        this.checkId = id;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 String location = mSearchView.getQuery().toString();
-                List<Address> addressList = null;
+                List<Address> addressList = new ArrayList<>();
 
                 if(location != null || !location.equals("")){
                     Geocoder geocoder = new Geocoder(getContext());
@@ -76,6 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         Address address = addressList.get(0);
                         LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                         Log.i(MainActivity.TAG, latLng.toString());
+                        updateTaskLocation(latLng);
                         if (marker!=null){
                             marker.remove();
                         }
@@ -95,6 +102,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 return false;
             }
         });
+    }
+
+    private void updateTaskLocation(LatLng latLng){
+        currTask.setLat(latLng.latitude);
+        currTask.setLng(latLng.longitude);
+        if(checkId != -1){
+            client.update(currTask);
+        }else{
+            client.insert(currTask);
+        }
     }
 
     //Creating MapView
@@ -134,6 +151,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     marker.remove();
                 }
                 marker = map.addMarker(new MarkerOptions().position(latLng).draggable(true).visible(true));
+                updateTaskLocation(latLng);
             }
         });
     }
@@ -141,7 +159,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.074208,21.824312) , 5));
+        LatLng latLng = new LatLng(39.074208,21.824312);
+        int zoom = 5;
+        if(checkId != -1){
+             latLng = new LatLng(currTask.getLat(),currTask.getLng());
+             zoom = 10;
+             marker = map.addMarker(new MarkerOptions().position(latLng));
+        }
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         markerChange();
         map.setMyLocationEnabled(true);
     }
