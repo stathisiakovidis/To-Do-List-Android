@@ -110,25 +110,29 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
+//
+//        switch(id){
+//            case R.id.action_settings:
+//                Log.i(TAG, "Settings option is clicked");
+//
+//                break;
+//            case R.id.action_calendar:
+//                //change activity
+//                Log.i(TAG, "Calendar option is clicked");
+//                Intent myIntent = new Intent(this, CalendarActivity.class);
+//                startActivity(myIntent);
+//                break;
+//            case R.id.action_indefinite:
+//                Log.i(TAG, "Indefinite option is clicked");
+//                break;
+//            default:
+//
+//        }
 
-        switch(id){
-            case R.id.action_settings:
-                Log.i(TAG, "Settings option is clicked");
+        Intent myIntent = new Intent(this, CalendarActivity.class);
+        startActivity(myIntent);
 
-                break;
-            case R.id.action_calendar:
-                //change activity
-                Log.i(TAG, "Calendar option is clicked");
-                Intent myIntent = new Intent(this, CalendarActivity.class);
-                startActivity(myIntent);
-                break;
-            case R.id.action_indefinite:
-                Log.i(TAG, "Indefinite option is clicked");
-                break;
-            default:
-
-        }
 
         return super.onOptionsItemSelected(item);
     }

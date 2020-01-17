@@ -56,7 +56,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public void setTasks(ArrayList<Task> tasks){
-        this.tasks = tasks;
+        this.tasks = reverseList(tasks);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -104,11 +104,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     case ItemTouchHelper.LEFT:
 
                         //Delete from database
-                        Task currTask = getTasks().get(position);
+                        Task currTask = tasks.get(position);
                         client.delete(currTask);
 
                         //Remove from view
-                        getTasks().remove(position);
+                        tasks.remove(position);
                         notifyItemRemoved(position);
 
                         break;
@@ -141,8 +141,4 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return list;
     }
 
-
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
 }
