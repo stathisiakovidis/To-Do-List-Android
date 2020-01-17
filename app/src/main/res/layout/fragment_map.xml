@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_frame"
     tools:context=".MapFragment">
 
@@ -12,5 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map" />
-
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="270dp"
+        android:layout_height="30dp"
+        android:background="@color/cardview_light_background"
+        android:layout_margin="10dp"
+        android:focusable="auto"
+        android:iconifiedByDefault="false"
+        app:defaultQueryHint="@string/search_hint"/>
 </FrameLayout>

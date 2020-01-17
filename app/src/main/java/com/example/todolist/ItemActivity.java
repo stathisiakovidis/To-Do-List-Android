@@ -61,7 +61,8 @@ public class ItemActivity extends AppCompatActivity {
         if(checkMapServices()){
             MapFragment fragment = new MapFragment();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                    .addToBackStack(null).commit();
         }
 
         //Back button
