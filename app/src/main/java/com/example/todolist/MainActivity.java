@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
         adapter = new CustomAdapter(getApplicationContext(),null);
+        recyclerView.setAdapter(adapter);
 
         if(checkAndRequestPermissions()) {
 
