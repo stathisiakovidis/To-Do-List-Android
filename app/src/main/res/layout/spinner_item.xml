@@ -2,11 +2,11 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#790E35"
+    android:fontFamily="sans-serif-medium"
     android:padding="5dp"
     android:textColor="#ffff"
-    android:textStyle="normal"
     android:textSize="18sp"
-    android:fontFamily="sans-serif-medium"
-    android:background="?attr/colorPrimary">
+    android:textStyle="normal">
 
 </TextView>
