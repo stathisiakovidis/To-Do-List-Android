@@ -18,6 +18,8 @@ import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {
@@ -42,6 +44,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         String currTitle = tasks.get(position).getTitle();
+
+        Calendar calendar = tasks.get(position).getCalendar();
+
+        if(calendar != null) {
+
+            int currDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int currMonth = calendar.get(Calendar.MONTH) + 1;
+            int currYear = calendar.get(Calendar.YEAR);
+            String currDate = currDay + "/" + currMonth + "/" + currYear;
+
+            holder.date.setText(currDate);
+
+        }
         String currBody = tasks.get(position).getBody();
 
         holder.title.setText(currTitle);
@@ -56,12 +71,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public void setTasks(ArrayList<Task> tasks){
-        this.tasks = tasks;
+        this.tasks = reverseList(tasks);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView title;
+        private TextView date;
         private TextView body;
         private int id;
 
@@ -69,6 +85,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             super(itemView);
             this.title = itemView.findViewById(R.id.title);
             this.body = itemView.findViewById(R.id.body);
+            this.date = itemView.findViewById(R.id.date);
 
             itemView.setOnClickListener(this::onClick);
 
@@ -104,11 +121,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     case ItemTouchHelper.LEFT:
 
                         //Delete from database
-                        Task currTask = getTasks().get(position);
+                        Task currTask = tasks.get(position);
                         client.delete(currTask);
 
                         //Remove from view
-                        getTasks().remove(position);
+                        tasks.remove(position);
                         notifyItemRemoved(position);
 
                         break;
@@ -141,8 +158,4 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return list;
     }
 
-
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
 }
