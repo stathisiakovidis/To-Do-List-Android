@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.example.todolist.database.DatabaseClient;
-import com.example.todolist.database.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -39,8 +38,9 @@ import static com.example.todolist.Constants.MULTIPLE_PERMISSION_CODE;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MyTag";
-    private RecyclerView mainRecyclerView;
-    private CustomAdapter recyclerAdapter;
+
+    private RecyclerView recyclerView;
+    private CustomAdapter adapter;
     private DatabaseClient client;
 
     @Override
@@ -57,16 +57,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Setting Notes as main content
-        mainRecyclerView = findViewById(R.id.main_recycler_view);
-        mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = findViewById(R.id.main_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
-        recyclerAdapter = new CustomAdapter(getApplicationContext(),null);
+        adapter = new CustomAdapter(getApplicationContext(),null);
 
         if(checkAndRequestPermissions()) {
 
             try {
-                recyclerAdapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
-                mainRecyclerView.setAdapter(recyclerAdapter);
+                adapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+                recyclerView.setAdapter(adapter);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -87,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "OnStart is called");
         //Change tasks and show the new ones
         try {
-            recyclerAdapter.setTasks(client.getAllDone());
+            adapter.setTasks(client.getAllDone());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        recyclerAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     //Creates option in menu (in example settings)
@@ -155,14 +155,14 @@ public class MainActivity extends AppCompatActivity {
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
                 try {
                     if (selectedItem.equals("Most Recently")){
-                        recyclerAdapter.setTasks(client.getAllDone());
+                        adapter.setTasks(client.getAllDone());
                     }else if(selectedItem.equals("By Date")){
-                        recyclerAdapter.setTasks(client.getDateNotes());
+                        adapter.setTasks(client.getDateNotes());
                     }else if (selectedItem.equals("Drafts")){
-                        recyclerAdapter.setTasks(client.getDraft());
+                        adapter.setTasks(client.getDraft());
                     }
 
-                    recyclerAdapter.recyclerViewGesture(getApplicationContext(), mainRecyclerView);
+                    adapter.recyclerViewGesture(getApplicationContext(), recyclerView);
 
                 }catch (ExecutionException e) {
                     e.printStackTrace();
@@ -239,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                         }
-                        //permission is denied (and never ask again is checked)
-                        //shouldShowRequestPermissionRationale will return false
+                        // Permission is denied (and never ask again is checked)
+                        // shouldShowRequestPermissionRationale will return false
                         else {
                             Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG)
                                     .show();

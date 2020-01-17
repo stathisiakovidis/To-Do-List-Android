@@ -13,10 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,7 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-import static com.example.todolist.Constants.MAPS_API_KEY;
+import static com.example.todolist.Constants.MAP_BUNDLE_KEY;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -104,7 +102,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // objects or sub-Bundles.
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY);
+            mapViewBundle = savedInstanceState.getBundle(MAP_BUNDLE_KEY);
         }
         mMapView.onCreate(mapViewBundle);
 
@@ -116,10 +114,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        Bundle mapViewBundle = outState.getBundle(MAPS_API_KEY);
+        Bundle mapViewBundle = outState.getBundle(MAP_BUNDLE_KEY);
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
-            outState.putBundle(MAPS_API_KEY, mapViewBundle);
+            outState.putBundle(MAP_BUNDLE_KEY, mapViewBundle);
         }
 
         mMapView.onSaveInstanceState(mapViewBundle);
