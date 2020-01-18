@@ -14,6 +14,7 @@ import com.example.todolist.database.DatabaseClient;
 import com.example.todolist.database.Task;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.model.LatLng;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,8 @@ public class ItemActivity extends AppCompatActivity {
     private DatabaseClient client;
     private boolean done = false;
     private boolean isUpdate = false;
+    private MapFragment mapFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,18 +86,16 @@ public class ItemActivity extends AppCompatActivity {
 
                 fillItems(task);
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         //Initialize map fragment
         if(checkMapServices()){
-            MapFragment fragment = new MapFragment(task, client, id);
+            mapFragment = new MapFragment(task, id);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName())
+                    .replace(R.id.fragment_frame, mapFragment, mapFragment.getClass().getSimpleName())
                     .addToBackStack(null).commit();
         }
 
@@ -109,9 +110,7 @@ public class ItemActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(checkMapServices()){
-            if(mLocationPermissionGranted){
-            }
-            else{
+            if(!mLocationPermissionGranted){
                 getLocationPermission();
             }
         }
@@ -145,9 +144,19 @@ public class ItemActivity extends AppCompatActivity {
             task.setTitle(title.getText().toString());
             task.setBody(body.getText().toString());
 
-            if(!isUpdate)
+            LatLng latLng = mapFragment.getLatLng();
+            if (latLng != null) {
+                task.setLat(mapFragment.getLatLng().latitude);
+                task.setLng(mapFragment.getLatLng().longitude);
+            }
+            if(!isUpdate) {
+                Log.e(MainActivity.TAG, "from destroy, insert with title" + title.getText().toString());
+
                 client.insert(task);
-            else
+
+            }else
+                Log.e(MainActivity.TAG, "from destroy, update with title" + title.getText().toString());
+
                 client.update(task);
         }
     }
@@ -172,6 +181,8 @@ public class ItemActivity extends AppCompatActivity {
             case R.id.action_done:
                 Log.i(MainActivity.TAG, "Done option is clicked");
 
+                done = true;
+
                 String currTitle = title.getText().toString();
                 String currBody = body.getText().toString();
                 String currDate = dateText.getText().toString();
@@ -182,18 +193,25 @@ public class ItemActivity extends AppCompatActivity {
                     task.setTitle(currTitle);
                     task.setBody(currBody);
 
+
+                    LatLng latLng = mapFragment.getLatLng();
+                    if (latLng != null) {
+                        task.setLat(mapFragment.getLatLng().latitude);
+                        task.setLng(mapFragment.getLatLng().longitude);
+                    }
+
                     if(!currDate.isEmpty()){
                         task.setType(Task.Type.DATE.toString());
                     }else {
                         task.setType(Task.Type.NODATE.toString());
                     }
 
-                    if(!isUpdate)
+                    if(!isUpdate) {
+                        Log.e(MainActivity.TAG, "from tick with title" + currTitle);
                         client.insert(task);
-                    else
+                    }else
                         client.update(task);
                     //The task is saved properly
-                    done = true;
 
                     Log.i(MainActivity.TAG, "Insert is done");
                 }

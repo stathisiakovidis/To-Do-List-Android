@@ -1,7 +1,6 @@
 package com.example.todolist;
 
 
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -39,12 +38,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private Marker marker;
     private Task currTask;
-    private DatabaseClient client;
     private int checkId;
+    private LatLng latLng;
 
-    MapFragment(Task task, DatabaseClient client, int id) {
+    MapFragment(Task task, int id) {
         this.currTask = task;
-        this.client = client;
         this.checkId = id;
     }
 
@@ -68,10 +66,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //Search Location by using Geocoder
     private void searchQuery () {
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 String location = mSearchView.getQuery().toString();
+
                 List<Address> addressList;
 
                 Geocoder geocoder = new Geocoder(getContext());
@@ -79,9 +79,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     addressList = geocoder.getFromLocationName(location, 1);
                     if(addressList.size() > 0) {
                         Address address = addressList.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        latLng = new LatLng(address.getLatitude(), address.getLongitude());
                         Log.i(MainActivity.TAG, latLng.toString());
-                        updateTaskLocation(latLng);
                         if (marker != null) {
                             marker.remove();
                         }
@@ -102,16 +101,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 return false;
             }
         });
-    }
-
-    private void updateTaskLocation(LatLng latLng){
-        currTask.setLat(latLng.latitude);
-        currTask.setLng(latLng.longitude);
-        if(checkId != -1){
-            client.update(currTask);
-        }else{
-            client.insert(currTask);
-        }
     }
 
     //Creating MapView
@@ -149,16 +138,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 marker.remove();
             }
             marker = map.addMarker(new MarkerOptions().position(latLng).draggable(true).visible(true));
-            updateTaskLocation(latLng);
         });
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
+
+        //Disable compass because it messes up with search
+        map.getUiSettings().setCompassEnabled(false);
+
         LatLng latLng = new LatLng(39.074208,21.824312);
         int zoom = 5;
-        if(checkId != -1){
+
+        // If item exists and it has a location, add it as a marker
+        if(checkId != -1 && currTask.getLat() != 0 && currTask.getLng() != 0){
              latLng = new LatLng(currTask.getLat(),currTask.getLng());
              zoom = 10;
              marker = map.addMarker(new MarkerOptions().position(latLng));
@@ -204,6 +198,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
-
+    public LatLng getLatLng() {
+        return latLng;
+    }
 
 }

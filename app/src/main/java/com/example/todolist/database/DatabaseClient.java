@@ -2,8 +2,11 @@ package com.example.todolist.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.room.Room;
+
+import com.example.todolist.MainActivity;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -29,8 +32,7 @@ public class DatabaseClient {
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getFromThisDay(timeInMillis);
-                return tasks;
+                return (ArrayList<Task>) db.userDao().getFromThisDay(timeInMillis);
             }
         }
 
@@ -47,8 +49,7 @@ public class DatabaseClient {
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getAllDone();
-                return tasks;
+                return (ArrayList<Task>) db.userDao().getAllDone();
             }
         }
 
@@ -65,8 +66,7 @@ public class DatabaseClient {
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getDateNotes();
-                return tasks;
+                return (ArrayList<Task>) db.userDao().getDateNotes();
             }
         }
 
@@ -83,8 +83,7 @@ public class DatabaseClient {
             @Override
             protected ArrayList<Task> doInBackground(Void... voids) {
 
-                ArrayList<Task> tasks = (ArrayList<Task>) db.userDao().getDraft();
-                return tasks;
+                return (ArrayList<Task>) db.userDao().getDraft();
             }
         }
 
@@ -100,8 +99,7 @@ public class DatabaseClient {
             @Override
             protected Task doInBackground(Void... voids) {
 
-                Task task = db.userDao().getSpecific(id);
-                return task;
+                return db.userDao().getSpecific(id);
             }
         }
 
@@ -117,6 +115,7 @@ public class DatabaseClient {
             @Override
             protected Void doInBackground(Void... voids) {
 
+                Log.e(MainActivity.TAG, task.getTitle() + " inserted");
                 db.userDao().insert(task);
                 return null;
             }
@@ -133,6 +132,7 @@ public class DatabaseClient {
 
             @Override
             protected Void doInBackground(Void... voids) {
+                Log.e(MainActivity.TAG, task.getTitle() + " updated");
 
                 db.userDao().update(task);
                 return null;
