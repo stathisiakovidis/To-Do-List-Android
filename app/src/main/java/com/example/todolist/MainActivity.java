@@ -160,16 +160,22 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (selectedItem) {
                         case "Most Recently":
-                            adapter.setTasks(client.getAllDone());
+                            adapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+                            //adapter.setTasks(client.getAllDone());
                             break;
                         case "By Date":
-                            adapter.setTasks(client.getDateNotes());
+                            adapter = new CustomAdapter(getApplicationContext(), client.getDateNotes());
+
+                            //adapter.setTasks(client.getDateNotes());
                             break;
                         case "Drafts":
-                            adapter.setTasks(client.getDraft());
+                            adapter = new CustomAdapter(getApplicationContext(), client.getDraft());
+
+                            // adapter.setTasks(client.getDraft());
                             break;
                     }
 
+                    recyclerView.setAdapter(adapter);
                     adapter.recyclerViewGesture(getApplicationContext(), recyclerView);
 
                 }catch (ExecutionException | InterruptedException e) {

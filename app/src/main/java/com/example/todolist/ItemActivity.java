@@ -115,13 +115,14 @@ public class ItemActivity extends AppCompatActivity {
             }
         }
     }
-
+//eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
     private void fillItems(Task task) {
 
-        if(task.getType().equals("DATE")) {
+        Calendar calendar = task.getCalendar();
+
+        if(calendar != null){
 
             Log.i(MainActivity.TAG, "Type: " + task.getType());
-            Calendar calendar = task.getCalendar();
             LocalDate localDate = calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             int day = localDate.getDayOfMonth();
             int month = localDate.getMonthValue();
@@ -129,6 +130,7 @@ public class ItemActivity extends AppCompatActivity {
 
             dateText.setText(day + "\\" + month + "\\" + year);
         }
+
         title.setText(task.getTitle());
         body.setText(task.getBody());
     }
@@ -185,7 +187,7 @@ public class ItemActivity extends AppCompatActivity {
 
                 String currTitle = title.getText().toString();
                 String currBody = body.getText().toString();
-                String currDate = dateText.getText().toString();
+                String currDate = dateText.getText().toString(); //EINAI ADEIO ENO DEN PREPEI (AN TO FERO APO DRAFT)
 
                 if(!currTitle.isEmpty()){
                     DatabaseClient client = new DatabaseClient(getApplicationContext());

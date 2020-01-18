@@ -43,6 +43,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        Log.e(MainActivity.TAG, tasks.get(position).getType() + "title is " + tasks.get(position).getTitle());
+
         String currTitle = tasks.get(position).getTitle();
 
         Calendar calendar = tasks.get(position).getCalendar();
@@ -55,6 +57,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             String currDate = currDay + "/" + currMonth + "/" + currYear;
 
             holder.date.setText(currDate);
+
+        }else{
+            holder.date.setText("");
 
         }
         String currBody = tasks.get(position).getBody();
@@ -71,7 +76,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public void setTasks(ArrayList<Task> tasks){
-        this.tasks = reverseList(tasks);
+        this.tasks = tasks;//reverseList(tasks);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
