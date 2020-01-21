@@ -115,7 +115,7 @@ public class ItemActivity extends AppCompatActivity {
             }
         }
     }
-//eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
     private void fillItems(Task task) {
 
         Calendar calendar = task.getCalendar();
@@ -139,8 +139,9 @@ public class ItemActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+
         //Do this only if the task is not saved properly
-        if(!done) {
+        if(!done && !title.getText().toString().equals("")) {
 
             task.setType(Task.Type.DRAFT.toString());
             task.setTitle(title.getText().toString());
@@ -267,9 +268,7 @@ public class ItemActivity extends AppCompatActivity {
 
             dateText.setText("date");
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(0);
-
+            task.setCalendar(null);
             task.setType(Task.Type.NODATE.toString());
 
             Log.i(MainActivity.TAG, "Long click");

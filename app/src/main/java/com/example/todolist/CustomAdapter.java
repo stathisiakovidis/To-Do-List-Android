@@ -30,6 +30,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public CustomAdapter(Context context, ArrayList<Task> tasks){
         this.context = context;
         this.tasks = tasks;
+        //Log.e(MainActivity.TAG, String.valueOf(tasks.size()));
     }
 
     @NonNull
@@ -43,7 +44,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Log.e(MainActivity.TAG, tasks.get(position).getType() + "title is " + tasks.get(position).getTitle());
+        Log.e(MainActivity.TAG, tasks.get(position).getType() + " title is " + tasks.get(position).getTitle());
 
         String currTitle = tasks.get(position).getTitle();
 
@@ -76,7 +77,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public void setTasks(ArrayList<Task> tasks){
-        this.tasks = tasks;//reverseList(tasks);
+        this.tasks = reverseList(tasks);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -125,6 +126,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 switch (direction){
                     case ItemTouchHelper.LEFT:
 
+                        Log.e(MainActivity.TAG, String.valueOf(tasks.size()));
                         //Delete from database
                         Task currTask = tasks.get(position);
                         client.delete(currTask);
