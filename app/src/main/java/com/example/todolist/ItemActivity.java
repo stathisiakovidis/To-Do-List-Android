@@ -157,10 +157,11 @@ public class ItemActivity extends AppCompatActivity {
 
                 client.insert(task);
 
-            }else
+            }else{
                 Log.e(MainActivity.TAG, "from destroy, update with title" + title.getText().toString());
 
                 client.update(task);
+            }
         }
     }
 
