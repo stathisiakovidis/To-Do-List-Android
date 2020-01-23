@@ -25,12 +25,9 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {
 
     private ArrayList<Task> tasks;
-    private Context context;
 
-    public CustomAdapter(Context context, ArrayList<Task> tasks){
-        this.context = context;
+    public CustomAdapter(ArrayList<Task> tasks){
         this.tasks = tasks;
-        //Log.e(MainActivity.TAG, String.valueOf(tasks.size()));
     }
 
     @NonNull
@@ -93,7 +90,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.body = itemView.findViewById(R.id.body);
             this.date = itemView.findViewById(R.id.date);
 
-            itemView.setOnClickListener(this::onClick);
+            itemView.setOnClickListener(this);
 
         }
 
@@ -158,7 +155,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
 
     //Reverse Task List to show the most recently
-    public ArrayList<Task> reverseList(ArrayList<Task> list) {
+    private ArrayList<Task> reverseList(ArrayList<Task> list) {
         for(int i = 0, j = list.size() - 1; i < j; i++) {
             list.add(i, list.remove(j));
         }

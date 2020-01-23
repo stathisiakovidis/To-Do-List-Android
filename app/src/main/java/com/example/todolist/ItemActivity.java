@@ -135,12 +135,6 @@ public class ItemActivity extends AppCompatActivity {
         body.setText(task.getBody());
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//    }
-
     @Override
     protected void onPause() {
         super.onPause();

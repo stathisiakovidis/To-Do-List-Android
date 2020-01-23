@@ -19,9 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener {
 
-    private RecyclerView recyclerView;
     private DatabaseClient client;
-    private CalendarView calendarView;
     private CustomAdapter adapter;
     private LinearLayoutManager layoutManager;
     private Calendar calendar;
@@ -48,8 +46,8 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         client = new DatabaseClient(getApplicationContext());
 
         //Rest of the IDs
-        calendarView = findViewById(R.id.calendarView);
-        recyclerView = findViewById(R.id.recyclerView);
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         try {
 
@@ -63,9 +61,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
 //            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
 //            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
 
-            adapter = new CustomAdapter(
-                    this,
-                    client.getFromThisDay(calendar.getTimeInMillis()));
+            adapter = new CustomAdapter(client.getFromThisDay(calendar.getTimeInMillis()));
 
             recyclerView.setAdapter(adapter);
 
@@ -73,13 +69,11 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
             recyclerView.setLayoutManager(layoutManager);
 
             //Add listener to date change
-            calendarView.setOnDateChangeListener(this::onSelectedDayChange);
+            calendarView.setOnDateChangeListener(this);
 
             adapter.recyclerViewGesture(getApplicationContext(), recyclerView);
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -92,9 +86,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         //Change tasks and show the new ones
         try {
             adapter.setTasks(client.getFromThisDay(calendar.getTimeInMillis()));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         adapter.notifyDataSetChanged();
@@ -114,9 +106,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         //Change tasks and show the new ones
         try {
             adapter.setTasks(client.getFromThisDay(calendar.getTimeInMillis()));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         adapter.notifyDataSetChanged();

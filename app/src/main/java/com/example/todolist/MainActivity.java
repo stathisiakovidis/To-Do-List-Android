@@ -1,7 +1,6 @@
 package com.example.todolist;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -63,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
-        adapter = new CustomAdapter(getApplicationContext(),null);
+        adapter = new CustomAdapter(null);
         recyclerView.setAdapter(adapter);
 
         if(checkAndRequestPermissions()) {
 
             try {
-                adapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
+                adapter = new CustomAdapter(client.getAllDone());
                 recyclerView.setAdapter(adapter);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -160,18 +158,13 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (selectedItem) {
                         case "Most Recently":
-                            adapter = new CustomAdapter(getApplicationContext(), client.getAllDone());
-                            //adapter.setTasks(client.getAllDone());
+                            adapter = new CustomAdapter(client.getAllDone());
                             break;
                         case "By Date":
-                            adapter = new CustomAdapter(getApplicationContext(), client.getDateNotes());
-
-                            //adapter.setTasks(client.getDateNotes());
+                            adapter = new CustomAdapter(client.getDateNotes());
                             break;
                         case "Drafts":
-                            adapter = new CustomAdapter(getApplicationContext(), client.getDraft());
-
-                            // adapter.setTasks(client.getDraft());
+                            adapter = new CustomAdapter(client.getDraft());
                             break;
                     }
 
