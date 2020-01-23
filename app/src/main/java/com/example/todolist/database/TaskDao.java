@@ -18,7 +18,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task WHERE type == 'DRAFT'")
     List<Task> getDraft();
 
-    @Query("SELECT * FROM task WHERE calendar = :timeInMillis")
+    @Query("SELECT * FROM task WHERE calendar = :timeInMillis AND type == 'DATE'")
     List<Task> getFromThisDay(long timeInMillis);
 
     @Query("SELECT * FROM task WHERE id = :id")
