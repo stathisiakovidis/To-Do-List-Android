@@ -71,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         client = new DatabaseClient(getApplicationContext());
-        adapter = new CustomAdapter(null);
+        adapter = new CustomAdapter(null, true);
         recyclerView.setAdapter(adapter);
 
         if(checkAndRequestPermissions()) {
 
             try {
-                adapter = new CustomAdapter(client.getAllDone());
+                adapter = new CustomAdapter(client.getAllDone(), true);
                 recyclerView.setAdapter(adapter);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -168,13 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (selectedItem) {
                         case "Most Recently":
-                            adapter = new CustomAdapter(client.getAllDone());
+                            adapter = new CustomAdapter(client.getAllDone(), true);
                             break;
                         case "By Date":
                             adapter = new CustomAdapter(client.getDateNotes());
                             break;
                         case "Drafts":
-                            adapter = new CustomAdapter(client.getDraft());
+                            adapter = new CustomAdapter(client.getDraft(), true);
                             break;
                     }
 

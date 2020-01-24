@@ -19,15 +19,44 @@ import com.example.todolist.database.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>  {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
 
     private ArrayList<Task> tasks;
 
     public CustomAdapter(ArrayList<Task> tasks){
-        this.tasks = tasks;
+        if(tasks != null) {
+            this.tasks = tasks;
+
+            long currTime = Calendar.getInstance().getTimeInMillis();
+
+            ArrayList<Task> futureTasks = new ArrayList<>();
+            for(Task task: tasks){
+                if(task.getCalendar().getTimeInMillis() > currTime){
+                    futureTasks.add(task);
+                }
+            }
+
+            //this.tasks = futureTasks.sort();
+
+//            Collections.sort(futureTasks, (o1, o2) -> {
+//                return o1.getCalendar().getTimeInMillis().compareTo(o2.getCalendar().getTimeInMillis());
+//            });
+
+            futureTasks.sort(Comparator.comparing(task -> task.getCalendar().getTimeInMillis()));
+
+            this.tasks = futureTasks;
+
+        }
+    }
+
+    public CustomAdapter(ArrayList<Task> tasks, boolean noDate){
+        if(tasks != null && noDate == true) {
+            this.tasks = reverseList(tasks);
+        }
     }
 
     @NonNull
@@ -76,6 +105,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void setTasks(ArrayList<Task> tasks){
         this.tasks = reverseList(tasks);
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
