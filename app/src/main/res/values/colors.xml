@@ -3,4 +3,6 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="ours">#790E35</color>
+    <color name="taskbar">#FF550A26</color>
 </resources>

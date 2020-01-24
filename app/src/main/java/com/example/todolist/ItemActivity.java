@@ -72,6 +72,9 @@ public class ItemActivity extends AppCompatActivity {
 
         client = new DatabaseClient(getApplicationContext());
 
+        getWindow().setStatusBarColor(ContextCompat.getColor(getBaseContext(), R.color.taskbar));
+
+
         task = new Task();
 
         Intent intent = getIntent();
@@ -319,14 +322,8 @@ public class ItemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: called.");
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
-                }
-                else{
-                    getLocationPermission();
-                }
-            }
+        if (requestCode == PERMISSIONS_REQUEST_ENABLE_GPS && !mLocationPermissionGranted) {
+            getLocationPermission();
         }
 
     }

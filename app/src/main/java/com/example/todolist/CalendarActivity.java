@@ -8,6 +8,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,9 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
         //Rest of the IDs
         CalendarView calendarView = findViewById(R.id.calendarView);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(getBaseContext(), R.color.taskbar));
+
 
         try {
 
