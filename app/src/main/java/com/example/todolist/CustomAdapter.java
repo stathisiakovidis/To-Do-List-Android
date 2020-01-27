@@ -27,6 +27,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     private ArrayList<Task> tasks;
 
+    // Constructor with date
     public CustomAdapter(ArrayList<Task> tasks){
         if(tasks != null) {
             this.tasks = tasks;
@@ -47,6 +48,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
+    //Constructor if it doesn't have a date
     public CustomAdapter(ArrayList<Task> tasks, boolean noDate){
         if(tasks != null && noDate) {
             this.tasks = reverseList(tasks);
@@ -57,8 +59,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
