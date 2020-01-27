@@ -156,13 +156,8 @@ public class ItemActivity extends AppCompatActivity {
                 task.setLng(mapFragment.getLatLng().longitude);
             }
             if(!isUpdate) {
-                Log.e(MainActivity.TAG, "from destroy, insert with title" + title.getText().toString());
-
                 client.insert(task);
-
             }else{
-                Log.e(MainActivity.TAG, "from destroy, update with title" + title.getText().toString());
-
                 client.update(task);
             }
         }
@@ -218,7 +213,6 @@ public class ItemActivity extends AppCompatActivity {
                         client.insert(task);
                     }else
                         client.update(task);
-                    //The task is saved properly
 
                     Log.i(MainActivity.TAG, "Insert is done");
                 }
@@ -279,11 +273,6 @@ public class ItemActivity extends AppCompatActivity {
             return true;
         }
     }
-
-    //Google map Setup
-    /*private void runMap(){
-        View map = findViewById(R.id.map);
-    }*/
 
     /*
     * In this part we are checking if all services are updated and compatible with

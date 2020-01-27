@@ -61,10 +61,6 @@ public class CalendarActivity extends AppCompatActivity implements CalendarView.
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-//            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
-//            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
-//            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
-
             adapter = new CustomAdapter(client.getFromThisDay(calendar.getTimeInMillis()));
 
             recyclerView.setAdapter(adapter);

@@ -58,13 +58,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new FabListener());
 
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
+        // Change the color of the taskbar
         getWindow().setStatusBarColor(ContextCompat.getColor(getBaseContext(), R.color.taskbar));
 
         //Setting Notes as main content
@@ -118,28 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        switch(id){
-//            case R.id.action_settings:
-//                Log.i(TAG, "Settings option is clicked");
-//
-//                break;
-//            case R.id.action_calendar:
-//                //change activity
-//                Log.i(TAG, "Calendar option is clicked");
-//                Intent myIntent = new Intent(this, CalendarActivity.class);
-//                startActivity(myIntent);
-//                break;
-//            case R.id.action_indefinite:
-//                Log.i(TAG, "Indefinite option is clicked");
-//                break;
-//            default:
-//
-//        }
 
         Intent myIntent = new Intent(this, CalendarActivity.class);
         startActivity(myIntent);
@@ -191,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
-
 
     //Permissions Control and Request
     private boolean checkAndRequestPermissions() {

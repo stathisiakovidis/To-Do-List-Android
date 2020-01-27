@@ -40,12 +40,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 }
             }
 
-            //this.tasks = futureTasks.sort();
-
-//            Collections.sort(futureTasks, (o1, o2) -> {
-//                return o1.getCalendar().getTimeInMillis().compareTo(o2.getCalendar().getTimeInMillis());
-//            });
-
             futureTasks.sort(Comparator.comparing(task -> task.getCalendar().getTimeInMillis()));
 
             this.tasks = futureTasks;
@@ -54,7 +48,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public CustomAdapter(ArrayList<Task> tasks, boolean noDate){
-        if(tasks != null && noDate == true) {
+        if(tasks != null && noDate) {
             this.tasks = reverseList(tasks);
         }
     }
